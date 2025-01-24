@@ -1,7 +1,7 @@
 # Installation of Ollama natively in Ubuntu 24.04 without docker
 
 The following instructions show how to install Ollama accelerated for Intel GPU on Ubuntu 24.04, without using docker.  It will walk 
-through the steps installing the GPU drivers, oneAPI runtime library, and apex-llm accelerated Ollama library.  It then shows use
+through the steps installing the GPU drivers, oneAPI runtime library, and ipex-llm accelerated Ollama library.  It then shows use
 of Ollama directly on the command line, and via a simple Python script.
 
 References:
@@ -88,7 +88,7 @@ $ source /opt/intel/oneapi/setvars.sh
 $ source ~/miniforge3/bin/activate 
 $ conda activate ollama-rag
 $ export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
-$ ./ollama run llama3.2:1b-instruct-q8_0
+$ ./ollama run llama2:7b
 What is the meaning of life?
 ```
 
@@ -101,3 +101,28 @@ $ conda activate ollama-rag
 $ pip install langchain_community
 $ python sample.py
 ``
+
+## Step 5: Enabling RAG with Ollama
+
+While leaving the terminal window running with 'ollama serve', perform the following in a new terminal window to scan and index the short story about 'Snowball' from the docs folder:
+
+```
+$ pip install docx2txt langchain_chroma
+$ python rag_scan.py
+```
+
+Then run the following to invoke Ollama with the additional context of the documents scanned above:
+```
+$ python rag_query.py
+Question: What is the name of Snowball's friend?
+Answer: Milo
+Question: What type of animal was Milo?
+Answer: Milo is a field mouse.
+Question: What are some other places Snowball might like to explore?
+Answer: Other places Snowball might like to explore include:
+
+1. The forest: With its towering trees and dense underbrush, the forest would provide Snowball with plenty of hiding spots and obstacles to navigate. He could climb trees, chase squirrels, and discover hidden streams.
+2. The meadow's edges: Snowball might enjoy exploring the meadow's borders, where the grass meets the trees or the stream runs. This area would offer a mix of familiarity and new sights, sounds, and smells.
+3. A nearby hill: Snowball might be intrigued by the prospect of climbing a hill for a panoramic view of the meadow. He could see far and wide, spotting animals and landmarks he's never seen before.
+Question: exit
+```
