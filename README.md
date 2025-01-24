@@ -99,14 +99,5 @@ While leaving the terminal window running with 'ollama serve', perform the follo
 $ source ~/miniforge3/bin/activate 
 $ conda activate ollama-rag
 $ pip install langchain_community
-$ <create sample.py with the following>
-from langchain_community.llms import Ollama
-
-# Initialize Ollama with your chosen model
-llm = Ollama(model="llama3.2")
-
-# Invoke the model with a query
-response = llm.invoke("What is LLM?")
-print(response)
 $ python sample.py
 ``
