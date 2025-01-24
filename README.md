@@ -92,7 +92,7 @@ $ ./ollama run llama3.2:1b-instruct-q8_0
 What is the meaning of life?
 ```
 
-## Step 3: Accessing Ollama via Python app
+## Step 4: Accessing Ollama via Python app
 
 While leaving the terminal window running with 'ollama serve', perform the following in a new terminal window:
 ```
