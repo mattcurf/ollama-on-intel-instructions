@@ -59,7 +59,7 @@ After rebooting the system above, perform the following steps in a terminal wind
 ```
 $ wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 $ bash Miniforge3-$(uname)-$(uname -m).sh -b
-$ source /home/matt/miniforge3/bin/activate 
+$ source ~/miniforge3/bin/activate 
 $ conda create -n ollama-rag python=3.11 -y
 $ conda activate ollama-rag
 $ pip install --pre --upgrade ipex-llm[cpp] 
@@ -75,7 +75,7 @@ In one terminal window, run the following to start the Ollama server:
 ```
 $ cd ~/ollama_binaries
 $ source /opt/intel/oneapi/setvars.sh
-$ source /home/matt/miniforge3/bin/activate 
+$ source ~/miniforge3/bin/activate 
 $ conda activate ollama-rag
 $ export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
 $ ./ollama serve
@@ -85,7 +85,7 @@ In a second terminal window, run the following to start a Ollama client connecti
 ```
 $ cd ~/ollama_binaries
 $ source /opt/intel/oneapi/setvars.sh
-$ source /home/matt/miniforge3/bin/activate 
+$ source ~/miniforge3/bin/activate 
 $ conda activate ollama-rag
 $ export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
 $ ./ollama run llama3.2:1b-instruct-q8_0
@@ -96,7 +96,7 @@ What is the meaning of life?
 
 While leaving the terminal window running with 'ollama serve', perform the following in a new terminal window:
 ```
-$ source /home/matt/miniforge3/bin/activate 
+$ source ~/miniforge3/bin/activate 
 $ conda activate ollama-rag
 $ pip install langchain_community
 $ <create sample.py with the following>
