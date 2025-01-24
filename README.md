@@ -100,13 +100,15 @@ $ source ~/miniforge3/bin/activate
 $ conda activate ollama-rag
 $ pip install langchain_community
 $ python sample.py
-``
+```
 
 ## Step 5: Enabling RAG with Ollama
 
-While leaving the terminal window running with 'ollama serve', perform the following in a new terminal window to scan and index the short story about 'Snowball' from the docs folder:
+While leaving the terminal window running with 'ollama serve', perform the following in a new terminal window to scan and index the short story about 'Snowball' from the docs folder (Snowball is a short story about a bunny created by ChatGPT).  Other .docx documents could also be added to this folder and scanned for a richer set of Q&A from the large language model:
 
 ```
+$ source ~/miniforge3/bin/activate 
+$ conda activate ollama-rag
 $ pip install docx2txt langchain_chroma
 $ python rag_scan.py
 ```
