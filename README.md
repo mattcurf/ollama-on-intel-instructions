@@ -8,6 +8,10 @@ References:
 * https://github.com/intel/ipex-llm/blob/main/docs/mddocs/Quickstart/llama_cpp_quickstart.md
 * https://github.com/intel/ipex-llm/blob/main/docs/mddocs/Quickstart/install_linux_gpu.md#install-gpu-driver
 
+## Support
+
+This repo is provided as is, and no support is provided or intended.
+
 ## Step 1: GPU driver installation
 
 Perform the following steps in a terminal window to install the GPU drivers: 
