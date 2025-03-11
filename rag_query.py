@@ -8,10 +8,10 @@ from langchain_core.runnables import RunnablePassthrough
 
 # loading the vectorstore
 vectorstore = Chroma(persist_directory="./database/chroma_db1",
-embedding_function=OllamaEmbeddings(model="llama2:7b"))
+embedding_function=OllamaEmbeddings(model="tinyllama:1.1b-chat-v1-q8_0"))
 
 # loading the Llama3 model
-llm = Ollama(model="llama2:7b")
+llm = Ollama(model="tinyllama:1.1b-chat-v1-q8_0")
 
 # using the vectorstore as the retriever
 retriever = vectorstore.as_retriever()

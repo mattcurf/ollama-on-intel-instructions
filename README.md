@@ -1,4 +1,4 @@
-# Installation of Ollama natively in Ubuntu 24.04 without docker
+# Installation of Ollama natively in Ubuntu 22.04 without docker
 
 The following instructions show how to install Ollama accelerated for Intel GPU on Ubuntu 24.04, without using docker.  It will walk 
 through the steps installing the GPU drivers, oneAPI runtime library, and ipex-llm accelerated Ollama library.  It then shows use
@@ -16,38 +16,24 @@ This repo is provided as is, and no support is provided or intended.
 
 Perform the following steps in a terminal window to install the GPU drivers: 
 ```
-$ mkdir -p /tmp/gpu && \
- cd /tmp/gpu && \
- wget https://github.com/oneapi-src/level-zero/releases/download/v1.19.2/level-zero_1.19.2+u24.04_amd64.deb && \ 
- wget https://github.com/intel/intel-graphics-compiler/releases/download/v2.5.6/intel-igc-core-2_2.5.6+18417_amd64.deb && \
- wget https://github.com/intel/intel-graphics-compiler/releases/download/v2.5.6/intel-igc-opencl-2_2.5.6+18417_amd64.deb && \
- wget https://github.com/intel/compute-runtime/releases/download/24.52.32224.5/intel-level-zero-gpu_1.6.32224.5_amd64.deb && \
- wget https://github.com/intel/compute-runtime/releases/download/24.52.32224.5/intel-opencl-icd_24.52.32224.5_amd64.deb && \
- wget https://github.com/intel/compute-runtime/releases/download/24.52.32224.5/libigdgmm12_22.5.5_amd64.deb && \
- sudo dpkg -i *.deb && \
- rm *.deb
+$ wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | sudo gpg --yes --dearmor --output /usr/share/keyrings/intel-graphics.gpg && \
+  echo "deb [arch=amd64,i386 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | sudo tee /etc/apt/sources.list.d/intel-gpu-jammy.list && \
+  sudo apt update && \
+  sudo apt install -q -y \
+    libze-intel-gpu1 \
+    libze1 \
+    intel-opencl-icd \
+    clinfo \
+    libze-dev \
+    intel-ocloc
 
 $ echo export ZES_ENABLE_SYSMAN=1 >> ~/.bashrc
 
-$ wget -qO - https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | \
-  sudo gpg --dearmor --output /usr/share/keyrings/oneapi-archive-keyring.gpg && \
-  echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | \
-  sudo tee /etc/apt/sources.list.d/oneAPI.list && \
-  sudo apt update && \
-  sudo apt install --no-install-recommends -q -y \
-    intel-oneapi-common-vars=2024.0.0-49406 \
-    intel-oneapi-common-oneapi-vars=2024.0.0-49406 \
-    intel-oneapi-compiler-dpcpp-cpp=2024.0.2-49895 \
-    intel-oneapi-dpcpp-ct=2024.0.0-49381 \
-    intel-oneapi-mkl=2024.0.0-49656 \
-    intel-oneapi-mpi=2021.11.0-49493 \
-    intel-oneapi-dal=2024.0.1-25 \
-    intel-oneapi-ippcp=2021.9.1-5 \
-    intel-oneapi-ipp=2021.10.1-13 \
-    intel-oneapi-tlt=2024.0.0-352 \
-    intel-oneapi-ccl=2021.11.2-5 \
-    intel-oneapi-dnnl=2024.0.0-49521 \
-    intel-oneapi-tcm-1.0=1.0.0-435
+$ wget -qO - https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | sudo gpg --yes --dearmor --output /usr/share/keyrings/oneapi-archive-keyring.gpg && \ 
+  echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list && \
+  apt update && \
+  apt install --no-install-recommends -q -y \
+    intel-oneapi-base-toolkit
 
 $ echo export SYCL_CACHE_PERSISTENT=1 >> ~/.bashrc
 
@@ -92,7 +78,7 @@ $ source /opt/intel/oneapi/setvars.sh
 $ source ~/miniforge3/bin/activate 
 $ conda activate ollama-rag
 $ export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
-$ ./ollama run llama2:7b
+$ ./ollama run tinyllama:1.1b-chat-v1-q8_0
 What is the meaning of life?
 ```
 
