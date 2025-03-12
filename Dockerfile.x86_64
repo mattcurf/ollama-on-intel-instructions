@@ -1,0 +1,52 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=america/los_angeles
+ENV PIP_ROOT_USER_ACTION=ignore
+ENV PATH=/root/miniforge3/bin:$PATH
+
+SHELL ["/bin/bash", "--login", "-c"]
+
+RUN apt update && \
+    apt install --no-install-recommends -q -y \
+    software-properties-common \
+    wget 
+
+RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | gpg --yes --dearmor --output /usr/share/keyrings/intel-graphics.gpg && \
+  echo "deb [arch=amd64,i386 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | tee /etc/apt/sources.list.d/intel-gpu-jammy.list && \
+  apt update && \
+  apt install -q -y \
+    libze-intel-gpu1 \
+    libze1 \
+    intel-opencl-icd \
+    clinfo \
+    libze-dev \
+    intel-ocloc
+
+ENV ZES_ENABLE_SYSMAN=1 
+
+RUN wget -qO - https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | gpg --yes --dearmor --output /usr/share/keyrings/oneapi-archive-keyring.gpg && \ 
+  echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | tee /etc/apt/sources.list.d/oneAPI.list && \
+  apt update && \
+  apt install --no-install-recommends -q -y \
+    intel-oneapi-base-toolkit
+
+ENV SYCL_CACHE_PERSISTENT=1 
+
+RUN cd /tmp && \
+  wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh" && \
+  bash Miniforge3-$(uname)-$(uname -m).sh -b && \
+  rm Miniforge3-$(uname)-$(uname -m).sh 
+
+RUN conda create -n llm python=3.11* -y && \
+  /bin/bash -c "source /root/miniforge3/bin/activate llm && \
+  pip install --upgrade pip && \
+  pip install --pre --upgrade ipex-llm[cpp] langchain_community docx2txt langchain_chroma && \
+  mkdir /ollama_binaries && \
+  cd /ollama_binaries && \
+  init-ollama"
+
+ENV ONEAPI_DEVICE_SELECTOR=level_zero:0
+
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "llm", "/bin/bash", "/project/scripts/run.sh"]
+

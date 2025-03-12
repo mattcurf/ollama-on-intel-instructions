@@ -118,3 +118,12 @@ Answer: Other places Snowball might like to explore include:
 3. A nearby hill: Snowball might be intrigued by the prospect of climbing a hill for a panoramic view of the meadow. He could see far and wide, spotting animals and landmarks he's never seen before.
 Question: exit
 ```
+
+# Validation
+
+An example Dockerfile and makefile are used to validate this content inside a docker container.  Assuming Docker is installed and configured for non-root user access, perform the following to execute the tests:
+
+```
+$ sudo apt install make
+$ make
+```
