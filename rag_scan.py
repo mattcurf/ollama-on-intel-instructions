@@ -32,7 +32,7 @@ from langchain_community.embeddings import OllamaEmbeddings
 
 vectorstore = Chroma.from_documents(
     documents=all_splits,
-    embedding=OllamaEmbeddings(model="llama2:7b", show_progress=True),
+    embedding=OllamaEmbeddings(model="llama2:7b-chat-q8_0", show_progress=True),
     persist_directory="./database/chroma_db1",
 )
 
